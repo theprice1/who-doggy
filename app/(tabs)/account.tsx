@@ -1,13 +1,13 @@
 import { Session } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { supabase } from "../../lib/supabase";
 
 export default function SystemTab() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState(""); // New state for on-screen messages
+  const [message, setMessage] = useState("");
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
@@ -49,6 +49,35 @@ export default function SystemTab() {
     if (error) setMessage(`Error: ${error.message}`);
   }
 
+  async function confirmDeleteAccount() {
+    Alert.alert(
+      "Delete Account",
+      "Are you sure you want to permanently delete your clinic account? This action cannot be undone.",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: executeDeletion,
+        },
+      ],
+    );
+  }
+
+  async function executeDeletion() {
+    setMessage("Deleting account...");
+    // 1. Call the secure Postgres function we just created
+    const { error } = await supabase.rpc("delete_user");
+
+    if (error) {
+      setMessage(`Error: ${error.message}`);
+      return;
+    }
+
+    // 2. Sign the user out of the local app
+    await supabase.auth.signOut();
+  }
+
   if (session) {
     return (
       <View className="flex-1 items-center justify-center bg-gray-50 p-6">
@@ -56,17 +85,33 @@ export default function SystemTab() {
           <Text className="text-2xl font-bold text-gray-900 mb-2">
             Secure Access Active
           </Text>
-          <Text className="text-gray-600 mb-8 font-medium">
+          <Text className="text-gray-600 mb-8 font-medium text-center">
             Logged in as: {session.user.email}
           </Text>
 
           <TouchableOpacity
             onPress={signOut}
-            className="bg-red-600 px-6 py-4 rounded-lg w-full items-center shadow-sm"
+            className="bg-blue-600 px-6 py-4 rounded-lg w-full items-center shadow-sm mb-4"
           >
             <Text className="text-white font-bold text-lg">Sign Out</Text>
           </TouchableOpacity>
+
+          {/* App Store Required Deletion Button */}
+          <TouchableOpacity
+            onPress={confirmDeleteAccount}
+            className="border border-red-200 bg-red-50 px-6 py-4 rounded-lg w-full items-center"
+          >
+            <Text className="text-red-700 font-bold text-lg">
+              Delete Account
+            </Text>
+          </TouchableOpacity>
         </View>
+
+        {message !== "" && (
+          <Text className="text-center font-bold mt-4 text-red-600">
+            {message}
+          </Text>
+        )}
       </View>
     );
   }
@@ -101,7 +146,6 @@ export default function SystemTab() {
           autoCapitalize="none"
         />
 
-        {/* Dynamic Message Box */}
         {message !== "" && (
           <Text className="text-center font-bold mb-4 text-red-600">
             {message}
