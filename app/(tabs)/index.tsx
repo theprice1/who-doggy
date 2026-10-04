@@ -24,40 +24,55 @@ export default function LookupTab() {
     setMessage("");
     setRegistry(null);
 
-    // Security Check
     if (!session) {
       setMessage("You must be logged in on the Account tab to search.");
       return;
     }
 
-    // Validation Check (Must be exactly 15 digits)
     if (chip.length !== 15 || !/^\d+$/.test(chip)) {
       setMessage("Error: Microchip must be exactly 15 digits.");
       return;
     }
 
     setLoading(true);
-    const prefix = chip.substring(0, 3); // Extract the manufacturer code
+    const prefix = chip.substring(0, 3);
 
-    // 1. Query the routing engine
-    const { data, error } = await supabase
+    // 1. Find which registry owns this prefix
+    const { data: registryData, error: registryError } = await supabase
       .from("registries")
       .select("*")
       .contains("prefix_codes", JSON.stringify([prefix]))
       .maybeSingle();
 
-    if (error || !data) {
+    if (registryError || !registryData) {
       setMessage(`No database found for prefix ${prefix}.`);
       setLoading(false);
       return;
     }
 
-    setRegistry(data);
+    setRegistry(registryData);
 
-    // 2. Silently log the scan for stray tracking
-    await supabase
-      .from("scans")
-      .insert([{ vet_id: session.user.id, microchip: chip }]);
+    // 2. Query our Mock Database for the specific dog
+    const { data: dogData } = await supabase
+      .from("mock_registry_data")
+      .select("*")
+      .eq("microchip", chip)
+      .maybeSingle();
+
+    // 3. Log the scan, using the mock data if we found it!
+    await supabase.from("scans").insert([
+      {
+        vet_id: session.user.id,
+        microchip: chip,
+        dog_name: dogData ? dogData.dog_name : "Unknown Dog",
+        breed: dogData ? dogData.breed : "Unknown Breed",
+        status: dogData
+          ? dogData.owner_status === "Reported Missing"
+            ? "Stray - Unclaimed"
+            : "Reunited"
+          : "Stray - Unclaimed",
+      },
+    ]);
 
     setLoading(false);
   }
