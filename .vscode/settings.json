@@ -4,5 +4,13 @@
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
   },
-  "cSpell.words": ["mobileprovision", "nativewind", "supabase"]
+  "cSpell.words": [
+    "anthonyprice",
+    "barcodes",
+    "mobileprovision",
+    "myapp",
+    "nativewind",
+    "supabase",
+    "whodoggy"
+  ]
 }
