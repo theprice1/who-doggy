@@ -14,7 +14,6 @@ export default function LookupTab() {
   const [registry, setRegistry] = useState<any>(null);
   const [searchAttempted, setSearchAttempted] = useState(false);
 
-  // Camera State
   const [isScanning, setIsScanning] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
 
@@ -25,7 +24,6 @@ export default function LookupTab() {
     supabase.auth.onAuthStateChange((_event, session) => setSession(session));
   }, []);
 
-  // Updated to accept an override chip string for instant camera searches
   async function handleSearch(overrideChip?: string) {
     const searchChip = overrideChip || chip;
     setMessage("");
@@ -80,27 +78,26 @@ export default function LookupTab() {
   const handleBarcodeScanned = ({ data }: { data: string }) => {
     setChip(data);
     setIsScanning(false);
-    handleSearch(data); // Auto-trigger the search
+    handleSearch(data);
   };
 
   async function openBrowser(url: string) {
     await WebBrowser.openBrowserAsync(url);
   }
 
-  // Render the Camera UI if active
   if (isScanning) {
     if (!permission) return <View />;
     if (!permission.granted) {
       return (
-        <View className="flex-1 justify-center items-center bg-gray-900 p-6">
+        <View className="flex-1 justify-center items-center bg-brand-dark p-6">
           <Text className="text-white text-center mb-6 text-lg font-bold">
             We need camera access to scan microchip barcodes.
           </Text>
           <TouchableOpacity
             onPress={requestPermission}
-            className="bg-blue-600 px-6 py-4 rounded-xl mb-4 w-full items-center"
+            className="bg-brand-yellow px-6 py-4 rounded-xl mb-4 w-full items-center"
           >
-            <Text className="text-white font-bold text-lg">
+            <Text className="text-brand-dark font-extrabold text-lg">
               Grant Permission
             </Text>
           </TouchableOpacity>
@@ -126,16 +123,15 @@ export default function LookupTab() {
               Point at Microchip Barcode
             </Text>
 
-            {/* A visual targeting box to help the user align the barcode */}
             <View className="flex-1 justify-center items-center">
-              <View className="w-72 h-40 border-4 border-green-400 rounded-xl bg-transparent opacity-70" />
+              <View className="w-72 h-40 border-4 border-brand-yellow rounded-xl bg-transparent opacity-80" />
             </View>
 
             <TouchableOpacity
               onPress={() => setIsScanning(false)}
               className="bg-white py-4 rounded-xl items-center shadow-lg mb-8"
             >
-              <Text className="text-gray-900 font-extrabold text-lg">
+              <Text className="text-brand-dark font-extrabold text-lg">
                 Cancel Scan
               </Text>
             </TouchableOpacity>
@@ -145,41 +141,44 @@ export default function LookupTab() {
     );
   }
 
-  // Render Standard Lookup UI
   return (
     <View className="flex-1 bg-gray-50 p-6">
       <View className="mb-8 mt-4">
-        <Text className="text-3xl font-extrabold text-gray-900 mb-2">
+        <Text className="text-3xl font-black text-brand-darkblue mb-2">
           Microchip Lookup
         </Text>
-        <Text className="text-gray-500 text-base">
+        <Text className="text-gray-500 text-base font-medium">
           Scan a barcode or enter a 15-digit number to cross-reference UK
           databases.
         </Text>
       </View>
 
       <View className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
-        {/* New Hardware Scan Button */}
         <TouchableOpacity
           onPress={() => setIsScanning(true)}
-          className="bg-gray-900 py-4 rounded-xl flex-row justify-center items-center shadow-sm mb-6"
+          className="bg-brand-yellow py-4 rounded-xl flex-row justify-center items-center shadow-sm mb-6"
         >
-          <FontAwesome name="qrcode" size={22} color="white" className="mr-2" />
-          <Text className="text-white font-bold text-lg ml-2">
+          <FontAwesome
+            name="qrcode"
+            size={24}
+            color="#1e293b"
+            className="mr-3"
+          />
+          <Text className="text-brand-dark font-extrabold text-xl">
             Scan Barcode
           </Text>
         </TouchableOpacity>
 
         <View className="flex-row items-center mb-6">
           <View className="flex-1 h-px bg-gray-200" />
-          <Text className="mx-4 text-gray-400 font-bold">
+          <Text className="mx-4 text-gray-400 font-bold text-xs tracking-widest">
             OR ENTER MANUALLY
           </Text>
           <View className="flex-1 h-px bg-gray-200" />
         </View>
 
         <TextInput
-          className="bg-gray-50 border border-gray-300 rounded-xl px-4 py-4 mb-4 text-gray-900 text-lg text-center tracking-widest font-bold"
+          className="bg-gray-50 border border-brand-lightblue rounded-xl px-4 py-4 mb-4 text-brand-darkblue text-xl text-center tracking-widest font-black"
           onChangeText={setChip}
           value={chip}
           placeholder="15-DIGIT NUMBER"
@@ -190,7 +189,7 @@ export default function LookupTab() {
         <TouchableOpacity
           onPress={() => handleSearch()}
           disabled={loading}
-          className={`${loading ? "bg-blue-400" : "bg-blue-600"} py-4 rounded-xl flex-row justify-center items-center shadow-sm`}
+          className={`${loading ? "bg-brand-darkblue/70" : "bg-brand-darkblue"} py-4 rounded-xl flex-row justify-center items-center shadow-sm`}
         >
           <FontAwesome name="search" size={20} color="white" className="mr-2" />
           <Text className="text-white font-bold text-lg ml-2">
@@ -205,63 +204,61 @@ export default function LookupTab() {
         )}
       </View>
 
-      {/* Scenario A: Direct Match */}
       {registry && (
-        <View className="bg-white p-6 rounded-2xl shadow-sm border border-green-200">
+        <View className="bg-white p-6 rounded-2xl shadow-sm border-2 border-green-500">
           <View className="flex-row items-center mb-4">
-            <FontAwesome name="check-circle" size={24} color="#16a34a" />
-            <Text className="text-xl font-bold text-gray-900 ml-2">
+            <FontAwesome name="check-circle" size={28} color="#22c55e" />
+            <Text className="text-xl font-black text-brand-dark ml-2">
               Primary Match Found
             </Text>
           </View>
 
-          <Text className="text-gray-600 mb-1">
+          <Text className="text-gray-600 mb-1 font-medium">
             Prefix {chip.substring(0, 3)} defaults to:
           </Text>
-          <Text className="text-2xl font-extrabold text-gray-900 mb-6">
+          <Text className="text-3xl font-black text-brand-darkblue mb-6">
             {registry.name}
           </Text>
 
           <TouchableOpacity
             onPress={() => openBrowser(registry.lookup_url)}
-            className="bg-green-600 py-4 rounded-xl items-center shadow-sm mb-3"
+            className="bg-green-500 py-4 rounded-xl items-center shadow-sm mb-3"
           >
-            <Text className="text-white font-bold text-lg">
+            <Text className="text-white font-black text-lg">
               Open {registry.name}
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => openBrowser("https://www.check-a-chip.co.uk")}
-            className="py-3 rounded-xl items-center border border-gray-300"
+            className="py-3 rounded-xl items-center border-2 border-brand-lightblue bg-brand-lightblue/20"
           >
-            <Text className="text-gray-700 font-bold">
+            <Text className="text-brand-darkblue font-bold">
               Not there? Search all UK Registries
             </Text>
           </TouchableOpacity>
         </View>
       )}
 
-      {/* Scenario B: Unrecognized Prefix */}
       {searchAttempted && !registry && !loading && (
-        <View className="bg-white p-6 rounded-2xl shadow-sm border border-orange-200">
+        <View className="bg-white p-6 rounded-2xl shadow-sm border-2 border-brand-gold">
           <View className="flex-row items-center mb-4">
-            <FontAwesome name="exclamation-circle" size={24} color="#ea580c" />
-            <Text className="text-xl font-bold text-gray-900 ml-2">
+            <FontAwesome name="exclamation-circle" size={28} color="#CFA037" />
+            <Text className="text-xl font-black text-brand-dark ml-2">
               Prefix Unmapped
             </Text>
           </View>
 
-          <Text className="text-gray-600 mb-6">
+          <Text className="text-gray-600 mb-6 font-medium leading-relaxed">
             We don't have a direct link for prefix {chip.substring(0, 3)}.
             Please use the UK-wide Check-a-Chip portal.
           </Text>
 
           <TouchableOpacity
             onPress={() => openBrowser("https://www.check-a-chip.co.uk")}
-            className="bg-orange-600 py-4 rounded-xl items-center shadow-sm"
+            className="bg-brand-gold py-4 rounded-xl items-center shadow-sm"
           >
-            <Text className="text-white font-bold text-lg">
+            <Text className="text-white font-black text-lg">
               Open Check-a-Chip
             </Text>
           </TouchableOpacity>

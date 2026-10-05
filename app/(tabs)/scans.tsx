@@ -74,7 +74,7 @@ export default function ScansTab() {
 
     if (!error) {
       setModalVisible(false);
-      fetchScans(); // Refresh the list to show the new data
+      fetchScans();
     } else {
       alert("Error saving details: " + error.message);
     }
@@ -83,11 +83,11 @@ export default function ScansTab() {
   if (!session) {
     return (
       <View className="flex-1 items-center justify-center bg-gray-50 p-6">
-        <FontAwesome name="lock" size={48} color="#9ca3af" className="mb-4" />
-        <Text className="text-xl font-bold text-gray-900 text-center mb-2">
+        <FontAwesome name="lock" size={56} color="#3F617E" className="mb-4" />
+        <Text className="text-2xl font-black text-brand-darkblue text-center mb-2">
           Secure Ledger
         </Text>
-        <Text className="text-gray-500 text-center">
+        <Text className="text-gray-500 text-center font-medium leading-relaxed">
           Please log in via the Account tab to view your clinic's stray scan
           history.
         </Text>
@@ -97,18 +97,18 @@ export default function ScansTab() {
 
   return (
     <View className="flex-1 bg-gray-50">
-      <View className="p-6 bg-white border-b border-gray-200">
-        <Text className="text-3xl font-extrabold text-gray-900 mb-1">
+      <View className="p-6 bg-white border-b-2 border-brand-lightblue pb-6">
+        <Text className="text-3xl font-black text-brand-darkblue mb-1 mt-4">
           Scan Logs
         </Text>
-        <Text className="text-gray-500 text-base">
+        <Text className="text-gray-500 text-base font-medium">
           Historical record of strays processed by your clinic.
         </Text>
       </View>
 
       {loading ? (
         <View className="flex-1 justify-center items-center">
-          <ActivityIndicator size="large" color="#2563eb" />
+          <ActivityIndicator size="large" color="#3F617E" />
         </View>
       ) : (
         <FlatList
@@ -116,46 +116,45 @@ export default function ScansTab() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ padding: 16 }}
           renderItem={({ item }) => (
-            <View className="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 mb-4">
+            <View className="bg-white p-5 rounded-2xl shadow-sm border border-brand-lightblue mb-4">
               <View className="flex-row justify-between items-start mb-3">
-                <View>
-                  {/* Display the newly added dog details, or a fallback if not edited yet */}
-                  <Text className="text-xl font-bold text-gray-900 mb-1">
+                <View className="flex-1 pr-4">
+                  <Text className="text-xl font-black text-brand-darkblue mb-1">
                     {item.dog_name || "Unknown Dog"}
                   </Text>
-                  <Text className="text-base text-gray-600 mb-1">
+                  <Text className="text-sm font-bold text-gray-500 mb-1">
                     {item.breed || "Unknown Breed"} • {item.microchip}
                   </Text>
-                  <Text className="text-xs text-gray-400">
+                  <Text className="text-xs font-bold text-gray-400">
                     Scanned: {new Date(item.scan_date).toLocaleString()}
                   </Text>
                 </View>
 
                 <TouchableOpacity
                   onPress={() => openEditModal(item)}
-                  className="bg-gray-100 p-3 rounded-full"
+                  className="bg-brand-lightblue/20 p-3 rounded-full border border-brand-lightblue"
                 >
-                  <FontAwesome name="pencil" size={18} color="#4b5563" />
+                  <FontAwesome name="pencil" size={18} color="#3F617E" />
                 </TouchableOpacity>
               </View>
 
               {/* Status Badge */}
               <View
-                className={`self-start px-3 py-1 rounded-full ${
+                className={`self-start px-4 py-1.5 rounded-full border ${
                   item.status === "Reunited"
-                    ? "bg-green-100"
+                    ? "bg-emerald-50 border-emerald-200"
                     : item.status === "Transferred"
-                      ? "bg-orange-100"
-                      : "bg-red-100"
+                      ? "bg-brand-gold/10 border-brand-gold/30"
+                      : "bg-rose-50 border-rose-200"
                 }`}
               >
                 <Text
-                  className={`font-bold text-sm ${
+                  className={`font-black text-xs uppercase tracking-wider ${
                     item.status === "Reunited"
-                      ? "text-green-700"
+                      ? "text-emerald-700"
                       : item.status === "Transferred"
-                        ? "text-orange-700"
-                        : "text-red-700"
+                        ? "text-brand-gold"
+                        : "text-rose-700"
                   }`}
                 >
                   {item.status || "Stray - Unclaimed"}
@@ -164,45 +163,63 @@ export default function ScansTab() {
             </View>
           )}
           ListEmptyComponent={
-            <Text className="text-center text-gray-500 mt-10 font-medium text-lg">
-              No strays scanned yet.
-            </Text>
+            <View className="items-center mt-12">
+              <FontAwesome
+                name="folder-open-o"
+                size={48}
+                color="#BBD6EF"
+                className="mb-4"
+              />
+              <Text className="text-center text-brand-darkblue font-bold text-lg">
+                No strays scanned yet.
+              </Text>
+              <Text className="text-center text-gray-500 mt-2">
+                Use the Lookup tab to scan a microchip.
+              </Text>
+            </View>
           }
         />
       )}
 
       {/* The Edit Modal */}
       <Modal visible={isModalVisible} animationType="slide" transparent={true}>
-        <View className="flex-1 justify-end bg-black/50">
-          <View className="bg-white rounded-t-3xl p-6 h-5/6">
-            <View className="flex-row justify-between items-center mb-6">
-              <Text className="text-2xl font-bold text-gray-900">
+        <View className="flex-1 justify-end bg-black/60">
+          <View className="bg-white rounded-t-3xl p-6 h-5/6 border-t-4 border-brand-yellow">
+            <View className="flex-row justify-between items-center mb-8 mt-2">
+              <Text className="text-2xl font-black text-brand-darkblue">
                 Update Profile
               </Text>
-              <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <FontAwesome name="times-circle" size={28} color="#9ca3af" />
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                className="bg-gray-100 p-2 rounded-full"
+              >
+                <FontAwesome name="times" size={20} color="#3F617E" />
               </TouchableOpacity>
             </View>
 
-            <Text className="text-gray-700 font-bold mb-2 ml-1">
+            <Text className="text-brand-darkblue font-bold mb-2 ml-1 text-sm tracking-widest uppercase">
               Dog's Name
             </Text>
             <TextInput
-              className="bg-gray-50 border border-gray-300 rounded-xl px-4 py-4 mb-5 text-gray-900 text-lg"
+              className="bg-gray-50 border border-brand-lightblue rounded-xl px-4 py-4 mb-6 text-brand-darkblue font-bold text-lg"
               onChangeText={setEditName}
               value={editName}
               placeholder="e.g. Buster"
+              placeholderTextColor="#9ca3af"
             />
 
-            <Text className="text-gray-700 font-bold mb-2 ml-1">Breed</Text>
+            <Text className="text-brand-darkblue font-bold mb-2 ml-1 text-sm tracking-widest uppercase">
+              Breed
+            </Text>
             <TextInput
-              className="bg-gray-50 border border-gray-300 rounded-xl px-4 py-4 mb-6 text-gray-900 text-lg"
+              className="bg-gray-50 border border-brand-lightblue rounded-xl px-4 py-4 mb-8 text-brand-darkblue font-bold text-lg"
               onChangeText={setEditBreed}
               value={editBreed}
               placeholder="e.g. Labrador Retriever"
+              placeholderTextColor="#9ca3af"
             />
 
-            <Text className="text-gray-700 font-bold mb-3 ml-1">
+            <Text className="text-brand-darkblue font-bold mb-3 ml-1 text-sm tracking-widest uppercase">
               Current Status
             </Text>
             <View className="flex-row justify-between mb-8">
@@ -210,15 +227,17 @@ export default function ScansTab() {
                 <TouchableOpacity
                   key={status}
                   onPress={() => setEditStatus(status)}
-                  className={`flex-1 py-3 px-2 rounded-lg mx-1 items-center border ${
+                  className={`flex-1 py-4 px-1 rounded-xl mx-1 items-center border-2 ${
                     editStatus === status
-                      ? "bg-blue-50 border-blue-600"
-                      : "bg-white border-gray-300"
+                      ? "bg-brand-darkblue border-brand-darkblue shadow-sm"
+                      : "bg-white border-brand-lightblue"
                   }`}
                 >
                   <Text
                     className={`text-center font-bold text-xs ${
-                      editStatus === status ? "text-blue-700" : "text-gray-600"
+                      editStatus === status
+                        ? "text-white"
+                        : "text-brand-darkblue"
                     }`}
                   >
                     {status}
@@ -227,15 +246,17 @@ export default function ScansTab() {
               ))}
             </View>
 
-            <TouchableOpacity
-              onPress={saveDogDetails}
-              disabled={saving}
-              className="bg-blue-600 py-4 rounded-xl items-center shadow-sm"
-            >
-              <Text className="text-white font-bold text-lg">
-                {saving ? "Saving..." : "Save Details"}
-              </Text>
-            </TouchableOpacity>
+            <View className="flex-1 justify-end pb-8">
+              <TouchableOpacity
+                onPress={saveDogDetails}
+                disabled={saving}
+                className="bg-brand-yellow py-4 rounded-xl items-center shadow-sm"
+              >
+                <Text className="text-brand-dark font-black text-lg">
+                  {saving ? "SAVING..." : "SAVE DETAILS"}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>

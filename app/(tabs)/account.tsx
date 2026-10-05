@@ -1,3 +1,4 @@
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Session } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -66,7 +67,6 @@ export default function SystemTab() {
 
   async function executeDeletion() {
     setMessage("Deleting account...");
-    // 1. Call the secure Postgres function we just created
     const { error } = await supabase.rpc("delete_user");
 
     if (error) {
@@ -74,41 +74,49 @@ export default function SystemTab() {
       return;
     }
 
-    // 2. Sign the user out of the local app
     await supabase.auth.signOut();
   }
 
+  // --- AUTHENTICATED STATE (LOGGED IN) ---
   if (session) {
     return (
       <View className="flex-1 items-center justify-center bg-gray-50 p-6">
-        <View className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 w-full max-w-md items-center">
-          <Text className="text-2xl font-bold text-gray-900 mb-2">
+        <View className="bg-white p-8 rounded-3xl shadow-sm border-2 border-brand-lightblue w-full max-w-md items-center">
+          <FontAwesome
+            name="shield"
+            size={48}
+            color="#3F617E"
+            className="mb-4"
+          />
+          <Text className="text-2xl font-black text-brand-darkblue mb-2 text-center">
             Secure Access Active
           </Text>
-          <Text className="text-gray-600 mb-8 font-medium text-center">
-            Logged in as: {session.user.email}
+          <Text className="text-gray-500 mb-8 font-bold text-center">
+            Logged in as:{"\n"}
+            <Text className="text-brand-darkblue">{session.user.email}</Text>
           </Text>
 
           <TouchableOpacity
             onPress={signOut}
-            className="bg-blue-600 px-6 py-4 rounded-lg w-full items-center shadow-sm mb-4"
+            className="bg-brand-darkblue px-6 py-4 rounded-xl w-full items-center shadow-sm mb-4"
           >
-            <Text className="text-white font-bold text-lg">Sign Out</Text>
+            <Text className="text-white font-black text-lg uppercase tracking-widest">
+              Sign Out
+            </Text>
           </TouchableOpacity>
 
-          {/* App Store Required Deletion Button */}
           <TouchableOpacity
             onPress={confirmDeleteAccount}
-            className="border border-red-200 bg-red-50 px-6 py-4 rounded-lg w-full items-center"
+            className="border-2 border-rose-200 bg-rose-50 px-6 py-4 rounded-xl w-full items-center"
           >
-            <Text className="text-red-700 font-bold text-lg">
+            <Text className="text-rose-700 font-bold text-lg">
               Delete Account
             </Text>
           </TouchableOpacity>
         </View>
 
         {message !== "" && (
-          <Text className="text-center font-bold mt-4 text-red-600">
+          <Text className="text-center font-bold mt-6 text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
             {message}
           </Text>
         )}
@@ -116,38 +124,53 @@ export default function SystemTab() {
     );
   }
 
+  // --- UNAUTHENTICATED STATE (LOGGED OUT) ---
   return (
     <View className="flex-1 justify-center bg-gray-50 p-6">
-      <View className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 max-w-md w-full self-center">
-        <Text className="text-3xl font-extrabold text-gray-900 mb-2 text-center">
-          Staff Login
-        </Text>
-        <Text className="text-gray-500 text-center mb-8">
-          Authorized veterinary & rescue access only
-        </Text>
+      <View className="bg-white p-8 rounded-3xl shadow-sm border-2 border-brand-lightblue max-w-md w-full self-center">
+        <View className="items-center mb-6">
+          <FontAwesome
+            name="stethoscope"
+            size={42}
+            color="#FDCB58"
+            className="mb-3"
+          />
+          <Text className="text-3xl font-black text-brand-darkblue mb-2 text-center">
+            Staff Login
+          </Text>
+          <Text className="text-gray-500 text-center font-medium">
+            Authorized veterinary & rescue access only
+          </Text>
+        </View>
 
-        <Text className="text-gray-700 font-bold mb-2 ml-1">Email Address</Text>
+        <Text className="text-brand-darkblue font-bold mb-2 ml-1 text-sm tracking-widest uppercase">
+          Email Address
+        </Text>
         <TextInput
-          className="bg-gray-50 border border-gray-300 rounded-xl px-4 py-4 mb-5 text-gray-900 text-base"
+          className="bg-gray-50 border-2 border-brand-lightblue rounded-xl px-4 py-4 mb-5 text-brand-darkblue font-bold text-lg"
           onChangeText={setEmail}
           value={email}
           placeholder="vet@clinic.co.uk"
+          placeholderTextColor="#9ca3af"
           autoCapitalize="none"
           keyboardType="email-address"
         />
 
-        <Text className="text-gray-700 font-bold mb-2 ml-1">Password</Text>
+        <Text className="text-brand-darkblue font-bold mb-2 ml-1 text-sm tracking-widest uppercase">
+          Password
+        </Text>
         <TextInput
-          className="bg-gray-50 border border-gray-300 rounded-xl px-4 py-4 mb-4 text-gray-900 text-base"
+          className="bg-gray-50 border-2 border-brand-lightblue rounded-xl px-4 py-4 mb-6 text-brand-darkblue font-bold text-lg"
           onChangeText={setPassword}
           value={password}
           secureTextEntry={true}
           placeholder="••••••••"
+          placeholderTextColor="#9ca3af"
           autoCapitalize="none"
         />
 
         {message !== "" && (
-          <Text className="text-center font-bold mb-4 text-red-600">
+          <Text className="text-center font-bold mb-6 text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
             {message}
           </Text>
         )}
@@ -155,19 +178,19 @@ export default function SystemTab() {
         <TouchableOpacity
           onPress={signInWithEmail}
           disabled={loading}
-          className="bg-blue-600 py-4 rounded-xl items-center mb-4 shadow-sm"
+          className="bg-brand-yellow py-4 rounded-xl items-center mb-4 shadow-sm"
         >
-          <Text className="text-white font-bold text-lg">
-            {loading ? "Processing..." : "Sign In"}
+          <Text className="text-brand-dark font-black text-lg uppercase tracking-wider">
+            {loading ? "PROCESSING..." : "SIGN IN"}
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={signUpWithEmail}
           disabled={loading}
-          className="py-4 rounded-xl items-center bg-gray-100"
+          className="py-4 rounded-xl items-center bg-brand-lightblue/20 border-2 border-brand-lightblue"
         >
-          <Text className="text-gray-700 font-bold text-lg">
+          <Text className="text-brand-darkblue font-black text-lg uppercase tracking-wider">
             Create Account
           </Text>
         </TouchableOpacity>

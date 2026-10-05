@@ -7,6 +7,11 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#BBD6EF"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anthonyprice.whodoggy",
@@ -15,6 +20,10 @@
       }
     },
     "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#BBD6EF"
+      },
       "package": "com.anthonyprice.whodoggy",
       "permissions": ["android.permission.CAMERA"]
     },

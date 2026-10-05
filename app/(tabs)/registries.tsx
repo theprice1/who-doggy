@@ -44,10 +44,12 @@ export default function RegistriesScreen() {
   }
 
   return (
-    <ScrollView className="flex-1 bg-gray-50 px-4 pt-6">
-      <View className="mb-6 px-2">
-        <Text className="text-3xl font-bold text-gray-800 mb-2">Databases</Text>
-        <Text className="text-gray-500 text-base leading-5">
+    <ScrollView className="flex-1 bg-gray-50">
+      <View className="p-6 bg-white border-b-2 border-brand-lightblue pb-6">
+        <Text className="text-3xl font-black text-brand-darkblue mb-1 mt-4">
+          Databases
+        </Text>
+        <Text className="text-gray-500 text-base font-medium">
           WhoDoggy cross-references these approved UK pet registries to locate
           microchip registration details.
         </Text>
@@ -55,29 +57,32 @@ export default function RegistriesScreen() {
 
       {/* Show a loading spinner while Supabase fetches the data */}
       {loading ? (
-        <View className="py-10 items-center">
-          <ActivityIndicator size="large" color="#2D89EF" />
-          <Text className="text-gray-500 mt-4">
-            Connecting to secure database...
+        <View className="py-12 items-center">
+          <ActivityIndicator size="large" color="#3F617E" />
+          <Text className="text-brand-darkblue font-bold mt-4 tracking-widest uppercase text-sm">
+            Syncing Registries...
           </Text>
         </View>
       ) : (
-        <View className="pb-10">
+        <View className="p-4 pb-10 mt-2">
           {databases.map((db) => (
             <TouchableOpacity
               key={db.id}
-              className="bg-white p-4 rounded-xl mb-3 flex-row items-center justify-between shadow-sm border border-gray-200"
+              className="bg-white p-4 rounded-2xl mb-3 flex-row items-center justify-between shadow-sm border border-brand-lightblue"
               onPress={() => Linking.openURL(db.contact)}
             >
               <View className="flex-row items-center flex-1">
-                <View className="bg-blue-100 w-12 h-12 rounded-full items-center justify-center mr-4">
-                  <FontAwesome name="database" size={18} color="#2D89EF" />
+                <View className="bg-brand-lightblue/20 border border-brand-lightblue w-12 h-12 rounded-full items-center justify-center mr-4">
+                  <FontAwesome name="database" size={18} color="#3F617E" />
                 </View>
-                <Text className="text-lg font-semibold text-gray-800 flex-shrink pr-4">
+                <Text className="text-lg font-black text-brand-darkblue flex-shrink pr-4">
                   {db.name}
                 </Text>
               </View>
-              <FontAwesome name="external-link" size={16} color="#9CA3AF" />
+
+              <View className="bg-gray-50 p-2.5 rounded-full border border-gray-100">
+                <FontAwesome name="external-link" size={14} color="#CFA037" />
+              </View>
             </TouchableOpacity>
           ))}
         </View>

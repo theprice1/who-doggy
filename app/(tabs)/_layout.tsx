@@ -3,7 +3,25 @@ import { Tabs } from "expo-router";
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: "#2D89EF" }}>
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: "#FDCB58", // Brand Yellow for the active tab
+        tabBarInactiveTintColor: "#BBD6EF", // Brand Light Blue for inactive tabs
+        tabBarStyle: {
+          backgroundColor: "#3F617E", // Brand Dark Blue background
+          borderTopWidth: 0,
+          elevation: 10,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: -4 },
+          shadowOpacity: 0.1,
+          shadowRadius: 6,
+          height: 60,
+          paddingBottom: 8,
+          paddingTop: 8,
+        },
+        headerShown: false, // Hides default OS header since we built custom UI headers on the pages
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
@@ -13,6 +31,8 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      {/* Note: If you fully deleted the registries.tsx file earlier, you can safely remove this block! */}
       <Tabs.Screen
         name="registries"
         options={{
@@ -22,6 +42,7 @@ export default function TabLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
         name="scans"
         options={{
@@ -36,7 +57,7 @@ export default function TabLayout() {
         options={{
           title: "Account",
           tabBarIcon: ({ color }) => (
-            <FontAwesome name="cogs" size={24} color={color} />
+            <FontAwesome name="shield" size={24} color={color} />
           ),
         }}
       />
