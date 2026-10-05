@@ -1,13 +1,5 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
-import { Platform } from "react-native";
-import { StyleSheet } from "react-native-css-interop";
-
-// This manually forces the web browser to accept Tailwind's color scheme classes
-if (Platform.OS === "web") {
-  // @ts-ignore - The library's typescript definitions are missing this method
-  StyleSheet.setFlag("darkMode", "class");
-}
 
 export default function TabLayout() {
   return (
