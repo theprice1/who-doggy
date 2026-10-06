@@ -25,7 +25,10 @@
         "backgroundColor": "#BBD6EF"
       },
       "package": "com.anthonyprice.whodoggy",
-      "permissions": ["android.permission.CAMERA"]
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "plugins": [
       "expo-router",
@@ -35,6 +38,12 @@
           "cameraPermission": "WhoDoggy requires camera access to scan microchip barcodes on veterinary paperwork and scanners."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "dc799a20-aec3-4e53-9526-0cd1f2eb270d"
+      }
+    }
   }
 }
