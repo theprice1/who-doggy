@@ -5,10 +5,10 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#FDCB58", // Brand Yellow for the active tab
-        tabBarInactiveTintColor: "#BBD6EF", // Brand Light Blue for inactive tabs
+        tabBarActiveTintColor: "#FDCB58",
+        tabBarInactiveTintColor: "#BBD6EF",
         tabBarStyle: {
-          backgroundColor: "#3F617E", // Brand Dark Blue background
+          backgroundColor: "#3F617E",
           borderTopWidth: 0,
           elevation: 10,
           shadowColor: "#000",
@@ -19,7 +19,7 @@ export default function TabLayout() {
           paddingBottom: 8,
           paddingTop: 8,
         },
-        headerShown: false, // Hides default OS header since we built custom UI headers on the pages
+        headerShown: false,
       }}
     >
       <Tabs.Screen
@@ -31,8 +31,6 @@ export default function TabLayout() {
           ),
         }}
       />
-
-      {/* Note: If you fully deleted the registries.tsx file earlier, you can safely remove this block! */}
       <Tabs.Screen
         name="registries"
         options={{
@@ -42,7 +40,6 @@ export default function TabLayout() {
           ),
         }}
       />
-
       <Tabs.Screen
         name="scans"
         options={{
