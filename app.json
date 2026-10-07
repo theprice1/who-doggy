@@ -7,11 +7,6 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/images/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#BBD6EF"
-    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anthonyprice.whodoggy",
@@ -36,6 +31,14 @@
         "expo-camera",
         {
           "cameraPermission": "WhoDoggy requires camera access to scan microchip barcodes on veterinary paperwork and scanners."
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#BBD6EF",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200
         }
       ]
     ],
