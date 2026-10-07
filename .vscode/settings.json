@@ -13,6 +13,7 @@
     "nativewind",
     "qrcode",
     "supabase",
-    "whodoggy"
+    "whodoggy",
+    "worklets"
   ]
 }
