@@ -57,7 +57,7 @@ export default function SystemTab() {
       [
         { text: "Cancel", style: "cancel" },
         {
-          text: "Delete",
+          text: "Delete Forever",
           style: "destructive",
           onPress: executeDeletion,
         },
@@ -67,7 +67,8 @@ export default function SystemTab() {
 
   async function executeDeletion() {
     setMessage("Deleting account...");
-    const { error } = await supabase.rpc("delete_user");
+    // Updated to match the SQL function name exactly
+    const { error } = await supabase.rpc("delete_my_account");
 
     if (error) {
       setMessage(`Error: ${error.message}`);
